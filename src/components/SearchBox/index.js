@@ -1,8 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { BsFillCalendar2DateFill, BsBarChartFill } from "react-icons/bs";
-import { MdKeyboardArrowDown } from "react-icons/md";
-import { FaClipboardList } from "react-icons/fa";
+import CalIcon from "../../images/cal.png";
+import ChartIcon from "../../images/chart.png";
+import ListIcon from "../../images/list.png";
+import ShapeIcon from "../../images/shape.png";
 
 const Wrapper = styled.div`
   display: flex;
@@ -90,6 +91,12 @@ const InputDate = styled.input`
   }
 `;
 
+const ShapeIconImg = styled.img`
+  position: absolute;
+  top: 20px;
+  right: 25.5px;
+`;
+
 const ButtonSearch = styled.button`
   color: #ffffff;
   line-height: 24px;
@@ -114,6 +121,15 @@ const ControlWrapper = styled.div`
   font-size: 27px;
 `;
 
+const ChartIconImg = styled.img`
+  margin-right: 28.58px;
+  cursor: pointer;
+`;
+
+const ListIconImg = styled.img`
+  cursor: pointer;
+`;
+
 function SearchBox() {
   return (
     <Wrapper>
@@ -126,26 +142,19 @@ function SearchBox() {
             <option>Quý 3</option>
             <option>Quý 4</option>
           </SelectInput>
-          <MdKeyboardArrowDown
-            style={{
-              position: "absolute",
-              top: "13px",
-              fontSize: "22px",
-              right: "25.5px",
-            }}
-          />
+          <ShapeIconImg src={ShapeIcon} />
         </SelectWrapper>
 
         <InputWrapper>
           <InputDate type="date" value="2020-07-01" />
           <InputDate type="date" value="2020-08-10" />
-          <BsFillCalendar2DateFill />
+          <img src={CalIcon} />
         </InputWrapper>
         <ButtonSearch>Tra cứu</ButtonSearch>
       </SearchWrapper>
       <ControlWrapper>
-        <BsBarChartFill style={{ color: "#E87722", marginRight: "28.3px" }} />
-        <FaClipboardList />
+        <ChartIconImg src={ChartIcon} />
+        <ListIconImg src={ListIcon} />
       </ControlWrapper>
     </Wrapper>
   );

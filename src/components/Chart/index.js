@@ -14,6 +14,7 @@ import faker from "faker";
 import styled from "styled-components";
 import { months } from "../../utils/chart";
 import { useWindowSize } from "../../hook";
+import moment from "moment";
 
 const ChartWrapper = styled.div`
   width: 100%;
@@ -71,22 +72,31 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
-const options = {
-  maintainAspectRatio: false,
-  plugins: {
-    legend: {
-      position: "top",
-    },
-    title: {
-      display: false,
-      text: "Chart.js Line Chart",
-    },
-  },
+const addDayToCalendar = (startDateDefault, numberDateDefault) => {
+  let date_ = [];
+  let date = startDateDefault;
+  if (numberDateDefault === 1) {
+    date_.push(moment(date).add(10, "days").calendar());
+    return date_;
+  }
+  for (let i = 0; i < numberDateDefault; ++i) {
+    date_.push(date);
+    date = moment(date).add(10, "days").calendar();
+  }
+  return date_;
 };
 
 function Chart() {
   const [width, height] = useWindowSize();
+  const [options, setOptions] = useState({
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: width <= 767 ? "bottom" : "top",
+        align: "end",
+      },
+    },
+  });
 
   useEffect(() => {
     if (width <= 767) {
@@ -105,45 +115,35 @@ function Chart() {
         plugins: {
           legend: {
             position: "top",
+            align: "end",
           },
         },
       });
     }
   }, [width]);
 
-  const [options, setOptions] = useState({
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: "top",
-      },
-    },
-  });
-
-  const [labels, setLabels] = useState([
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-  ]);
+  const [labels, setLabels] = useState(addDayToCalendar("07/01/2020", 5));
 
   const [data, setData] = useState({
-    labels,
+    labels: labels.map((item) => moment(item).format("DD/MM")),
     datasets: [
       {
-        label: faker.lorem.word(),
-        data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        label: "Quỹ A",
+        data: labels.map(() => genRand(0.9, 1, 3)),
+        borderColor: "#E87722",
+        backgroundColor: "#E87722",
       },
       {
-        label: faker.lorem.word(),
-        data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-        borderColor: "rgb(53, 162, 235)",
-        backgroundColor: "rgba(53, 162, 235, 0.5)",
+        label: "Quỹ B",
+        data: labels.map(() => genRand(0.9, 1, 3)),
+        borderColor: "#6ECEB2",
+        backgroundColor: "#6ECEB2",
+      },
+      {
+        label: "Quỹ C",
+        data: labels.map(() => genRand(0.9, 1, 3)),
+        borderColor: "#FED141",
+        backgroundColor: "#FED141",
       },
     ],
   });
@@ -154,9 +154,7 @@ function Chart() {
       datasets: data.datasets.map((item) => {
         return {
           ...item,
-          data: data.labels.map(() =>
-            faker.datatype.number({ min: 0, max: 1000 })
-          ),
+          data: data.labels.map(() => genRand(0.9, 1, 3)),
         };
       }),
     };
@@ -164,11 +162,13 @@ function Chart() {
   };
 
   const addDataset = () => {
+    const color = faker.commerce.color();
+
     const newDataset = {
       label: faker.lorem.word(),
-      data: data.labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      borderColor: faker.commerce.color(),
-      backgroundColor: faker.commerce.color(),
+      data: data.labels.map(() => genRand(0.9, 1, 3)),
+      borderColor: color,
+      backgroundColor: color,
     };
     setData({ ...data, datasets: [...data.datasets, newDataset] });
   };
@@ -177,21 +177,25 @@ function Chart() {
     let newArr = data.datasets.filter((value, index) => {
       return index != data.datasets.length - 1;
     });
-    console.log(newArr);
 
     setData({ ...data, datasets: newArr });
   };
 
   const addData = () => {
     if (data.labels.length > 0) {
-      const newLabels = months({ count: data.labels.length + 1 });
+      const newDay = addDayToCalendar(labels[labels.length - 1], 1);
+      const newLabels = [...data.labels, ...newDay];
+      setLabels(newLabels);
       const newDatasets = data.datasets.map((item, index) => {
-        item.data = newLabels.map(() =>
-          faker.datatype.number({ min: 0, max: 1000 })
-        );
+        item.data = newLabels.map(() => genRand(0.9, 1, 3));
         return item;
       });
-      setData({ labels: newLabels, datasets: newDatasets });
+      const newDayFormat = moment(newDay[0]).format("DD/MM");
+      const newLabelsFormat = [...data.labels, newDayFormat];
+      setData({
+        labels: newLabelsFormat,
+        datasets: newDatasets,
+      });
     }
   };
 
@@ -206,6 +210,16 @@ function Chart() {
       setData({ ...data, labels: newArr });
     }
   };
+
+  function genRand(min, max, decimalPlaces) {
+    var rand = Math.random() * (max - min) + min;
+    var power = Math.pow(10, decimalPlaces);
+    return Math.floor(rand * power) / power;
+  }
+
+  console.log(
+    moment(moment("2020-07-").add(10, "days").calendar()).format("DD/MM")
+  );
 
   return (
     <ChartWrapper>
