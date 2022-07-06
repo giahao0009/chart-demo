@@ -73,6 +73,7 @@ const InputWrapper = styled.span`
     width: 100%;
     margin-left: 0;
     margin-bottom: 14px;
+    justify-content: space-between;
   }
 `;
 
@@ -90,8 +91,6 @@ const InputDate = styled.input`
     outline: none;
   }
 `;
-
-const StrikeCustom = styled.span``;
 
 const ShapeIconImg = styled.img`
   position: absolute;
@@ -148,9 +147,7 @@ function SearchBox() {
         </SelectWrapper>
 
         <InputWrapper>
-          <InputDate type="date" value="2020-07-01" />
-          <span>-</span>
-          <InputDate type="date" value="2020-08-10" />
+          <InputDate type="text" value="01/07/2020 - 10/08/2020" />
           <img src={CalIcon} />
         </InputWrapper>
         <ButtonSearch>Tra cứu</ButtonSearch>

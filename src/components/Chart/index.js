@@ -94,7 +94,12 @@ function Chart() {
 
   const [data, setData] = useState({
     labels: labels.map((item) => {
-      return item;
+      if (item != "") {
+        let gen = moment(item).format("DD/MM");
+        return gen;
+      } else {
+        return item;
+      }
     }),
     datasets: [
       {
@@ -179,16 +184,21 @@ function Chart() {
     if (data.labels.length > 0) {
       const newDay = addDayToCalendar(labels[labels.length - 1]);
       console.log(newDay);
-      const newLabels = [...data.labels, ...newDay];
+      const newLabels = [...labels, ...newDay];
+      console.log(newLabels);
       setLabels(newLabels);
       const newDatasets = data.datasets.map((item, index) => {
         item.data = newLabels.map(() => genRand(0.9, 1, 3));
         return item;
       });
-      const newLabelsFormat = [...data.labels, ...newDay];
       setData({
-        labels: newLabelsFormat.map((item) => {
-          return item;
+        labels: newLabels.map((item) => {
+          if (item != "") {
+            let gen = moment(item).format("DD/MM");
+            return gen;
+          } else {
+            return item;
+          }
         }),
         datasets: newDatasets,
       });
@@ -196,13 +206,19 @@ function Chart() {
   };
 
   const removeData = () => {
-    if (data.labels.length <= 2) {
+    if (data.labels.length <= 20) {
       return;
     }
     if (data.labels.length > 0) {
-      const newArr = data.labels.filter((item, index) => {
-        return index !== data.labels.length - 1;
-      });
+      let newArr = data.labels;
+      for (let i = 0; i < 10; ++i) {
+        newArr = newArr.filter((item, index) => {
+          return index !== newArr.length - 1;
+        });
+      }
+      console.log(newArr);
+      setLabels(newArr);
+
       setData({ ...data, labels: newArr });
     }
   };

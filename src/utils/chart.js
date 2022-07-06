@@ -133,7 +133,7 @@ export const addDayToCalendar = (startDateDefault, numberDateDefault = 1) => {
   let date = startDateDefault;
   if (numberDateDefault === 1) {
     for (let i = 0; i < 9; ++i) {
-      date_.push(" ");
+      date_.push("");
     }
     date_.push(moment(date).add(10, "days").calendar());
     console.log(date_);
