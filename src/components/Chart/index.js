@@ -12,7 +12,12 @@ import {
 import { Line } from "react-chartjs-2";
 import faker from "faker";
 import styled from "styled-components";
-import { months } from "../../utils/chart";
+import {
+  getDates,
+  addDayToCalendar,
+  genRand,
+  addNewDataset,
+} from "../../utils/chart";
 import { useWindowSize } from "../../hook";
 import moment from "moment";
 
@@ -72,19 +77,6 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-const addDayToCalendar = (startDateDefault, numberDateDefault) => {
-  let date_ = [];
-  let date = startDateDefault;
-  if (numberDateDefault === 1) {
-    date_.push(moment(date).add(10, "days").calendar());
-    return date_;
-  }
-  for (let i = 0; i < numberDateDefault; ++i) {
-    date_.push(date);
-    date = moment(date).add(10, "days").calendar();
-  }
-  return date_;
-};
 
 function Chart() {
   const [width, height] = useWindowSize();
@@ -96,6 +88,34 @@ function Chart() {
         align: "end",
       },
     },
+  });
+
+  const [labels, setLabels] = useState(getDates("07/01/2020", "08/10/2020", 5));
+
+  const [data, setData] = useState({
+    labels: labels.map((item) => {
+      return item;
+    }),
+    datasets: [
+      {
+        label: "Quỹ A",
+        data: labels.map(() => genRand(0.9, 1, 3)),
+        borderColor: "#E87722",
+        backgroundColor: "#E87722",
+      },
+      {
+        label: "Quỹ B",
+        data: labels.map(() => genRand(0.9, 1, 3)),
+        borderColor: "#6ECEB2",
+        backgroundColor: "#6ECEB2",
+      },
+      {
+        label: "Quỹ C",
+        data: labels.map(() => genRand(0.9, 1, 3)),
+        borderColor: "#FED141",
+        backgroundColor: "#FED141",
+      },
+    ],
   });
 
   useEffect(() => {
@@ -122,32 +142,6 @@ function Chart() {
     }
   }, [width]);
 
-  const [labels, setLabels] = useState(addDayToCalendar("07/01/2020", 5));
-
-  const [data, setData] = useState({
-    labels: labels.map((item) => moment(item).format("DD/MM")),
-    datasets: [
-      {
-        label: "Quỹ A",
-        data: labels.map(() => genRand(0.9, 1, 3)),
-        borderColor: "#E87722",
-        backgroundColor: "#E87722",
-      },
-      {
-        label: "Quỹ B",
-        data: labels.map(() => genRand(0.9, 1, 3)),
-        borderColor: "#6ECEB2",
-        backgroundColor: "#6ECEB2",
-      },
-      {
-        label: "Quỹ C",
-        data: labels.map(() => genRand(0.9, 1, 3)),
-        borderColor: "#FED141",
-        backgroundColor: "#FED141",
-      },
-    ],
-  });
-
   const random = () => {
     const newData = {
       ...data,
@@ -162,10 +156,10 @@ function Chart() {
   };
 
   const addDataset = () => {
+    const char = data.datasets[data.datasets.length - 1].label;
     const color = faker.commerce.color();
-
     const newDataset = {
-      label: faker.lorem.word(),
+      label: addNewDataset(char),
       data: data.labels.map(() => genRand(0.9, 1, 3)),
       borderColor: color,
       backgroundColor: color,
@@ -183,17 +177,19 @@ function Chart() {
 
   const addData = () => {
     if (data.labels.length > 0) {
-      const newDay = addDayToCalendar(labels[labels.length - 1], 1);
+      const newDay = addDayToCalendar(labels[labels.length - 1]);
+      console.log(newDay);
       const newLabels = [...data.labels, ...newDay];
       setLabels(newLabels);
       const newDatasets = data.datasets.map((item, index) => {
         item.data = newLabels.map(() => genRand(0.9, 1, 3));
         return item;
       });
-      const newDayFormat = moment(newDay[0]).format("DD/MM");
-      const newLabelsFormat = [...data.labels, newDayFormat];
+      const newLabelsFormat = [...data.labels, ...newDay];
       setData({
-        labels: newLabelsFormat,
+        labels: newLabelsFormat.map((item) => {
+          return item;
+        }),
         datasets: newDatasets,
       });
     }
@@ -211,16 +207,6 @@ function Chart() {
     }
   };
 
-  function genRand(min, max, decimalPlaces) {
-    var rand = Math.random() * (max - min) + min;
-    var power = Math.pow(10, decimalPlaces);
-    return Math.floor(rand * power) / power;
-  }
-
-  console.log(
-    moment(moment("2020-07-").add(10, "days").calendar()).format("DD/MM")
-  );
-
   return (
     <ChartWrapper>
       <CanvasWrapper>
@@ -230,7 +216,7 @@ function Chart() {
       <ControlWarpper>
         <Button onClick={random}>Random</Button>
         <Button onClick={addDataset}>Add dataset</Button>
-        <Button onClick={removeDataset}>Remove</Button>
+        <Button onClick={removeDataset}>Remove dataset</Button>
         <Button onClick={addData}>Add Data</Button>
         <Button onClick={removeData}>Remove Data</Button>
       </ControlWarpper>

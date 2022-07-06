@@ -91,6 +91,8 @@ const InputDate = styled.input`
   }
 `;
 
+const StrikeCustom = styled.span``;
+
 const ShapeIconImg = styled.img`
   position: absolute;
   top: 20px;
@@ -147,6 +149,7 @@ function SearchBox() {
 
         <InputWrapper>
           <InputDate type="date" value="2020-07-01" />
+          <span>-</span>
           <InputDate type="date" value="2020-08-10" />
           <img src={CalIcon} />
         </InputWrapper>
