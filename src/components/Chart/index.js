@@ -210,7 +210,7 @@ function Chart() {
       return;
     }
     if (data.labels.length > 0) {
-      let newArr = data.labels;
+      let newArr = labels;
       for (let i = 0; i < 10; ++i) {
         newArr = newArr.filter((item, index) => {
           return index !== newArr.length - 1;
@@ -219,7 +219,17 @@ function Chart() {
       console.log(newArr);
       setLabels(newArr);
 
-      setData({ ...data, labels: newArr });
+      setData({
+        ...data,
+        labels: newArr.map((item) => {
+          if (item != "") {
+            let gen = moment(item).format("DD/MM");
+            return gen;
+          } else {
+            return item;
+          }
+        }),
+      });
     }
   };
 

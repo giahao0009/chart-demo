@@ -98,44 +98,47 @@ export const getDates = (startDate, endDate, numberDateDefault) => {
   }
   arrDate.push(endDate);
 
-  let genArrDate = [];
-  date = startDate;
-  for (let i = 0; i < numberDateDefault; ++i) {
-    genArrDate.push(date);
-    date = moment(date).add(10, "days").calendar();
-  }
+  console.log(arrDate);
 
-  const results = arrDate.map((date) => {
-    let news = genArrDate.filter((item) => {
-      if (date == item) {
-        return item;
-      } else {
-        return "";
-      }
-    });
-    return news;
-  });
+  // let genArrDate = [];
+  // date = startDate;
+  // for (let i = 0; i < numberDateDefault; ++i) {
+  //   genArrDate.push(date);
+  //   date = moment(date).add(10, "days").calendar();
+  // }
 
-  const finalResults = [];
-  for (let i = 0; i < results.length; ++i) {
-    if (results[i][0] == undefined) {
-      finalResults.push("");
-      continue;
-    }
-    finalResults.push(results[i][0]);
-  }
+  // const results = arrDate.map((date) => {
+  //   let news = genArrDate.filter((item) => {
+  //     if (date == item) {
+  //       return item;
+  //     } else {
+  //       return "";
+  //     }
+  //   });
+  //   return news;
+  // });
 
-  return finalResults;
+  // const finalResults = [];
+  // for (let i = 0; i < results.length; ++i) {
+  //   if (results[i][0] == undefined) {
+  //     finalResults.push("");
+  //     continue;
+  //   }
+  //   finalResults.push(results[i][0]);
+  // }
+
+  return arrDate;
 };
 
 export const addDayToCalendar = (startDateDefault, numberDateDefault = 1) => {
   let date_ = [];
   let date = startDateDefault;
   if (numberDateDefault === 1) {
-    for (let i = 0; i < 9; ++i) {
-      date_.push("");
+    for (let i = 0; i < 10; ++i) {
+      date = moment(date).add(1, "days").calendar();
+      date_.push(date);
     }
-    date_.push(moment(date).add(10, "days").calendar());
+    // date_.push(moment(date).add(10, "days").calendar());
     console.log(date_);
     return date_;
   }
