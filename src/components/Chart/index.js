@@ -88,6 +88,17 @@ function Chart() {
         align: "end",
       },
     },
+    scales: {
+      xAxes: [
+        {
+          ticks: {
+            autoSkip: false,
+            maxRotation: 0,
+            minRotation: 0,
+          },
+        },
+      ],
+    },
   });
 
   const [labels, setLabels] = useState(getDates("07/01/2020", "08/10/2020", 5));
@@ -132,6 +143,17 @@ function Chart() {
             position: "bottom",
           },
         },
+        scales: {
+          xAxes: [
+            {
+              ticks: {
+                autoSkip: false,
+                maxRotation: 0,
+                minRotation: 0,
+              },
+            },
+          ],
+        },
       });
     }
     if (width >= 768) {
@@ -142,6 +164,17 @@ function Chart() {
             position: "top",
             align: "end",
           },
+        },
+        scales: {
+          xAxes: [
+            {
+              ticks: {
+                autoSkip: false,
+                maxRotation: 0,
+                minRotation: 0,
+              },
+            },
+          ],
         },
       });
     }
