@@ -81,6 +81,7 @@ const InputDate = styled.input`
   font-size: 16px;
   font-weight: 400;
   height: 24px;
+  width: 200px;
   line-height: 24px;
   color: #e87722;
   border: none;

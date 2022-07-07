@@ -1,0 +1,15 @@
+@font-face {
+    font-family: "FWDCirCularVietTT";
+    src: url("./font/FWDCircularWeb-Book.d91e43e3.woff2");
+}
+
+@font-face{
+    font-family: "FWDCirCularVietTT";
+    src: url("./font/FWDCircularWeb-Medium.b45786fe.woff2");
+}
+
+@font-face {
+    font-family: "FWDCirCularVietTT";
+    src: url("./font/FWDCircularWeb-Bold.d03e103c.woff2");
+    font-weight: bold;
+}
